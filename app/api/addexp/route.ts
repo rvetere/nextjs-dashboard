@@ -10,6 +10,9 @@ export async function GET(req: NextRequest) {
   const { total_expenses, carried_over, daily_budget, settings_budget } =
     received;
   const date = new Date().toISOString().split('T')[0];
+  // delete all expenses first
+  await sql`DELETE FROM expenses`;
+
   const data = await sql<ExpensesType>`
         INSERT INTO expenses (total_expenses, carried_over, daily_budget, settings_budget, created_at)
         VALUES (${total_expenses}, ${carried_over}, ${daily_budget}, ${settings_budget}, ${date})
