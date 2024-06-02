@@ -84,6 +84,12 @@ export type ExpensesType = {
   created_at: string;
 };
 
+export type IpType = {
+  id: string;
+  ip: string;
+  created_at: string;
+};
+
 export type CustomerField = {
   id: string;
   name: string;

@@ -7,6 +7,29 @@ const {
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
+async function seedIps(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+    // Create the "current_ip" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS current_ip (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        ip VARCHAR(255) NOT NULL,
+        created_at DATE NOT NULL DEFAULT CURRENT_DATE
+      );
+    `;
+
+    console.log(`Created "expenses" table`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding expenses:', error);
+    throw error;
+  }
+}
+
 async function seedExpenses(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -24,23 +47,8 @@ async function seedExpenses(client) {
 
     console.log(`Created "expenses" table`);
 
-    // // Insert data into the "users" table
-    // const insertedUsers = await Promise.all(
-    //   users.map(async (user) => {
-    //     const hashedPassword = await bcrypt.hash(user.password, 10);
-    //     return client.sql`
-    //     INSERT INTO users (id, name, email, password)
-    //     VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
-    //     ON CONFLICT (id) DO NOTHING;
-    //   `;
-    //   }),
-    // );
-
-    // console.log(`Seeded ${insertedUsers.length} users`);
-
     return {
       createTable,
-      // users: insertedUsers,
     };
   } catch (error) {
     console.error('Error seeding expenses:', error);
@@ -204,7 +212,7 @@ async function seedRevenue(client) {
 async function main() {
   const client = await db.connect();
 
-  await seedExpenses(client);
+  await seedIps(client);
   // await seedUsers(client);
   // await seedCustomers(client);
   // await seedInvoices(client);
