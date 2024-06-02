@@ -75,6 +75,15 @@ export type FormattedCustomersTable = {
   total_paid: string;
 };
 
+export type ExpensesType = {
+  id: string;
+  total_expenses: number;
+  carried_over: number;
+  daily_budget: number;
+  settings_budget: number;
+  created_at: string;
+};
+
 export type CustomerField = {
   id: string;
   name: string;
