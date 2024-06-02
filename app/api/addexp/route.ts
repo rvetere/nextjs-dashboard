@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { unstable_noStore as noStore } from 'next/cache';
 import { ExpensesType } from '@/app/lib/definitions';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   noStore();
   const dataStr = req.nextUrl.searchParams.get('d');
   const received = JSON.parse(dataStr || '{}');
