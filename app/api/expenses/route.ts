@@ -21,3 +21,14 @@ export async function GET(req: NextRequest) {
   const items = await fetchExpenses();
   return NextResponse.json(items);
 }
+
+export async function POST(req: NextRequest) {
+  const { total_expenses, carried_over, daily_budget, settings_budget } =
+    await req.json();
+  const date = new Date().toISOString().split('T')[0];
+  const data = await sql<ExpensesType>`
+        INSERT INTO expenses (total_expenses, carried_over, daily_budget, settings_budget, created_at)
+        VALUES (${total_expenses}, ${carried_over}, ${daily_budget}, ${settings_budget}, ${date})
+        RETURNING *`;
+  return NextResponse.json(data.rows[0]);
+}
