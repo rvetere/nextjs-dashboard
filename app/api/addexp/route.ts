@@ -5,7 +5,7 @@ import { ExpensesType } from '@/app/lib/definitions';
 
 export async function GET(req: NextRequest) {
   const { total_expenses, carried_over, daily_budget, settings_budget } =
-    await req.json();
+    JSON.parse(req.headers.get('data') || '{}');
   console.log('GET request /api/addexp', {
     total_expenses,
     carried_over,
