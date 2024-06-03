@@ -13,15 +13,13 @@ export async function GET(req: NextRequest) {
   // delete all expenses first
   await sql`DELETE FROM expenses`;
 
-  const testQuery = `
-  INSERT INTO expenses (total_expenses, carried_over, daily_budget, settings_budget, created_at)
-  VALUES (${total_expenses}, ${carried_over}, ${daily_budget}, ${settings_budget}, ${date})
-  RETURNING *`;
-
-  const data = await sql<ExpensesType>`
-        INSERT INTO expenses (total_expenses, carried_over, daily_budget, settings_budget, created_at)
-        VALUES (${total_expenses}, ${carried_over}, ${daily_budget}, ${settings_budget}, ${date})
-        RETURNING *`;
-  // return NextResponse.json(data.rows[0]);
-  return NextResponse.json({ query: testQuery });
+  try {
+    const data = await sql<ExpensesType>`
+          INSERT INTO expenses (total_expenses, carried_over, daily_budget, settings_budget, created_at)
+          VALUES (${total_expenses}, ${carried_over}, ${daily_budget}, ${settings_budget}, ${date})
+          RETURNING *`;
+    return NextResponse.json(data.rows[0]);
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 500 });
+  }
 }
