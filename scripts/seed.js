@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt');
 
 async function seedIps(client) {
   try {
+    await client.sql`DROP TABLE IF EXISTS current_ip`;
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
     // Create the "current_ip" table if it doesn't exist
     const createTable = await client.sql`
@@ -32,15 +33,16 @@ async function seedIps(client) {
 
 async function seedExpenses(client) {
   try {
+    await client.sql`DROP TABLE IF EXISTS expenses`;
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
     // Create the "expenses" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS expenses (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        total_expenses INT NOT NULL,
-        carried_over INT NOT NULL,
-        daily_budget INT NOT NULL,
-        settings_budget INT NOT NULL,
+        total_expenses REAL NOT NULL,
+        carried_over REAL NOT NULL,
+        daily_budget REAL NOT NULL,
+        settings_budget REAL NOT NULL,
         created_at DATE NOT NULL
       );
     `;
@@ -212,7 +214,8 @@ async function seedRevenue(client) {
 async function main() {
   const client = await db.connect();
 
-  await seedIps(client);
+  // await seedIps(client);
+  // await seedExpenses(client);
   // await seedUsers(client);
   // await seedCustomers(client);
   // await seedInvoices(client);
