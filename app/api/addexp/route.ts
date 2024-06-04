@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   const received = JSON.parse(dataStr || '{}');
   const { total_expenses, carried_over, daily_budget, settings_budget } =
     received;
-  const date = new Date().toISOString().split('T')[0];
+  const date = new Date().toISOString();
   // delete all expenses first
   await sql`DELETE FROM expenses`;
 
